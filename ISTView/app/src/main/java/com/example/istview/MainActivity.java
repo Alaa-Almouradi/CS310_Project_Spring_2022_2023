@@ -13,8 +13,6 @@ import android.widget.ProgressBar;
 
 import com.google.android.material.tabs.TabLayout;
 
-import com.google.android.material.tabs.TabItem;
-
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recView;
     ProgressBar prgBar;
     TabLayout tabLayout;
-    TabLayout.OnTabSelectedListener m = new TabLayout.OnTabSelectedListener(){
+    TabLayout.OnTabSelectedListener tabchanger = new TabLayout.OnTabSelectedListener(){
         @Override
         public void onTabSelected(@NonNull TabLayout.Tab tab) {
             repo.locationByCategory(((ISTViewApplication)getApplication()).srv, handler, tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
@@ -71,6 +69,6 @@ public class MainActivity extends AppCompatActivity {
         //repo.getAllLocations(((ISTViewApplication)getApplication()).srv, handler);
         repo.locationByCategory(((ISTViewApplication)getApplication()).srv, handler, tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
 
-        tabLayout.addOnTabSelectedListener(m);
+        tabLayout.addOnTabSelectedListener(tabchanger);
     }
 }

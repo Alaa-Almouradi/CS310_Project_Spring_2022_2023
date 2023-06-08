@@ -1,6 +1,8 @@
 package com.example.istview;
 
-public class Locations {
+import java.io.Serializable;
+
+public class Locations implements Serializable {
 
     private String id;
 
