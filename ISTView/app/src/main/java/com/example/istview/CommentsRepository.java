@@ -12,8 +12,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Logger;
 
 public class CommentsRepository {
 
@@ -98,6 +102,8 @@ public class CommentsRepository {
                 msg.obj = data;
                 uiHandler.sendMessage(msg);
 
+                conn.disconnect();
+
             } catch (MalformedURLException e){
                 Log.e("DEV", e.getMessage());
             } catch (IOException e){
@@ -108,7 +114,7 @@ public class CommentsRepository {
         });
     }
 
-    public void postComment (ExecutorService srv, String user_name,
+    public void postComment (ExecutorService srv, Handler uiHandler, String user_name,
                              String user_comment, Double user_rating, Locations comment_loc){
 
         srv.execute(() -> {
@@ -116,7 +122,7 @@ public class CommentsRepository {
             try {
 
                 URL url =
-                        new URL("http://10.0.2.2:8080/tourism/comments/reviews");
+                        new URL("http://10.0.2.2:8080/tourism/comments/addReview");
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -131,32 +137,26 @@ public class CommentsRepository {
                 outputData.put("userName", user_name);
                 outputData.put("comment", user_comment);
                 outputData.put("rating", user_rating);
-                outputData.put("locationsId", comment_loc.getId());
+                outputData.put("locationId", comment_loc.getId());
 
                 BufferedOutputStream writer =
                         new BufferedOutputStream(conn.getOutputStream());
-
+                Log.i("DEV", outputData.toString());
                 writer.write(outputData.toString().getBytes(StandardCharsets.UTF_8));
                 writer.flush();
 
-                BufferedReader reader =
-                        new BufferedReader(
-                                new InputStreamReader(
-                                        conn.getInputStream()
-                                )
-                        );
 
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder buffer = new StringBuilder();
-
                 String line = "";
 
-                while((line= reader.readLine()) != null){
+                while((line=reader.readLine())!=null){
                     buffer.append(line);
                 }
 
-                JSONObject retVal = new JSONObject(buffer.toString());
+                uiHandler.sendEmptyMessage(0);
 
-                conn.disconnect();
+
 
 
             } catch (MalformedURLException e) {
@@ -166,8 +166,6 @@ public class CommentsRepository {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
-
         });
 
     }
