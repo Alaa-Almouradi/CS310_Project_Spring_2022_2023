@@ -3,6 +3,7 @@ package com.example.istview;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,7 +43,8 @@ public class ActivityDetails extends AppCompatActivity {
 
         btnComments.setOnClickListener(v->{
 
-            //Go to comments activity
+            Intent i = new Intent(ActivityDetails.this, CommentsActivity.class);
+            startActivity(i);
 
         });
 

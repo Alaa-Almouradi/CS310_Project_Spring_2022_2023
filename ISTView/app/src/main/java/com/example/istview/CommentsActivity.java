@@ -4,19 +4,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.tabs.TabLayout;
-
 import java.util.List;
 
-public class TestActivity extends AppCompatActivity {
+public class CommentsActivity extends AppCompatActivity {
 
     RecyclerView recView;
     ProgressBar prgBar;
@@ -32,7 +30,7 @@ public class TestActivity extends AppCompatActivity {
 
             List<Comments> data = (List<Comments>) msg.obj;
             CommentsAdapter adp =
-                    new CommentsAdapter(TestActivity.this, data);
+                    new CommentsAdapter(CommentsActivity.this, data);
             recView.setAdapter(adp);
 
             prgBar.setVisibility(View.INVISIBLE);
@@ -43,7 +41,7 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_comments);
 
         //tabLayout = findViewById(R.id.tabLayout_main);
 
@@ -52,6 +50,14 @@ public class TestActivity extends AppCompatActivity {
         recView.setLayoutManager(new LinearLayoutManager(this));
 
         prgBar.setVisibility(View.VISIBLE);
+
+        Button write_comment = findViewById(R.id.writeComment);
+
+        write_comment.setOnClickListener(v-> {
+
+            // To write comment page
+
+        });
 
         repo = new CommentsRepository();
         //repo.getAllLocations(((ISTViewApplication)getApplication()).srv, handler);
