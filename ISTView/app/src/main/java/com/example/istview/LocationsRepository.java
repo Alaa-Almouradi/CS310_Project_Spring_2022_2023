@@ -153,6 +153,74 @@ public class LocationsRepository {
         });
     }
 
+    public void locationByName (ExecutorService srv, Handler uiHandler, String loc_name){
+
+        srv.submit(() -> {
+            try {
+                List<Locations> data = new ArrayList<>();
+
+                URL url =
+                        new URL("http://10.0.2.2:8080/tourism/locations/search");
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/JSON");
+
+                JSONObject outputData = new JSONObject();
+
+                outputData.put("name", loc_name);
+
+                BufferedOutputStream writer =
+                        new BufferedOutputStream(conn.getOutputStream());
+
+                writer.write(outputData.toString().getBytes(StandardCharsets.UTF_8));
+                writer.flush();
+
+                BufferedReader reader
+                        = new BufferedReader(
+                        new InputStreamReader(
+                                conn.getInputStream()));
+                StringBuilder buffer = new StringBuilder();
+                String line = "";
+
+                while((line=reader.readLine()) !=null){
+                    buffer.append(line);
+                }
+
+                JSONArray arr = new JSONArray(buffer.toString());
+
+                for (int i = 0; i < arr.length(); i++){
+                    JSONObject current = arr.getJSONObject(i);
+
+                    Locations loc = new Locations(current.getString("id"),
+                            current.getString("name"),
+                            current.getString("category"),
+                            current.getInt("fee"),
+                            current.getString("address"),
+                            current.getString("description"),
+                            current.getString("image"));
+
+                    data.add(loc);
+                }
+
+                Message msg = new Message();
+                msg.obj = data;
+                uiHandler.sendMessage(msg);
+
+            } catch (MalformedURLException e){
+                Log.e("DEV", e.getMessage());
+            } catch (IOException e){
+                Log.e("DEV", e.getMessage());
+            } catch (JSONException e){
+                Log.e("DEV", e.getMessage());
+            }
+        });
+    }
+
     public void downloadImage(ExecutorService srv, Handler uiHandler, String path) {
 
         srv.submit(() -> {
