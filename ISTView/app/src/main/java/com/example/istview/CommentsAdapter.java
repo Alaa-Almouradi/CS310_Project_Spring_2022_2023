@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -46,6 +48,7 @@ public class CommentsAdapter extends RecyclerView.Adapter <CommentsAdapter.Comme
 
         holder.user_name.setText(data.get(position).getUserName());
         holder.user_comment.setText(data.get(position).getComment());
+        holder.userRate.setText(Double.toString(data.get(position).getRating()));
 
         ISTViewApplication app = (ISTViewApplication)((Activity)context).getApplication();
 
@@ -71,6 +74,7 @@ public class CommentsAdapter extends RecyclerView.Adapter <CommentsAdapter.Comme
         ConstraintLayout row;
         TextView user_name;
         TextView user_comment;
+        TextView userRate;
 
 
         public CommentsViewHolder(@NonNull View itemView) {
@@ -79,6 +83,7 @@ public class CommentsAdapter extends RecyclerView.Adapter <CommentsAdapter.Comme
             row = itemView.findViewById(R.id.row_list_comment);
             user_name = itemView.findViewById(R.id.user_name_place);
             user_comment = itemView.findViewById(R.id.user_comment);
+            userRate = itemView.findViewById(R.id.textViewCommentRating);
 
         }
 

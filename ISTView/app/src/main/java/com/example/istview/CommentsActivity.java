@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -42,6 +43,18 @@ public class CommentsActivity extends AppCompatActivity {
         }
     });
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +83,7 @@ public class CommentsActivity extends AppCompatActivity {
         repo = new CommentsRepository();
         //repo.getAllLocations(((ISTViewApplication)getApplication()).srv, handler);
         repo.commentByLocation(((ISTViewApplication)getApplication()).srv, handler, location);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
