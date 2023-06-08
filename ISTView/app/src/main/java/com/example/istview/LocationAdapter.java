@@ -52,15 +52,15 @@ public class LocationAdapter extends RecyclerView.Adapter <LocationAdapter.Locat
 
 
 
-        /*holder.row.setOnClickListener(v->{
+        holder.row.setOnClickListener(v->{
 
             Intent i = new Intent(context,ActivityDetails.class);
-            i.putExtra("id",data.get(position).getId());
+            i.putExtra("location",data.get(position));
 
             ((Activity)context).startActivity(i);
 
 
-        });*/
+        });
     }
 
     @Override
