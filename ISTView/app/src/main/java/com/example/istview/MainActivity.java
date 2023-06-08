@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+
+import com.google.android.material.tabs.TabLayout;
+
+import com.google.android.material.tabs.TabItem;
 
 import java.util.List;
 
@@ -18,6 +21,24 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recView;
     ProgressBar prgBar;
+    TabLayout tabLayout;
+    TabLayout.OnTabSelectedListener m = new TabLayout.OnTabSelectedListener(){
+        @Override
+        public void onTabSelected(@NonNull TabLayout.Tab tab) {
+            repo.locationByCategory(((ISTViewApplication)getApplication()).srv, handler, tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
+        }
+    };
+    LocationsRepository repo;
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -37,12 +58,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tabLayout = findViewById(R.id.tabLayout_main);
+
         prgBar = findViewById(R.id.progressBarList);
         recView = findViewById(R.id.recyclerViewList);
         recView.setLayoutManager(new LinearLayoutManager(this));
+
         prgBar.setVisibility(View.VISIBLE);
-        LocationsRepository repo = new LocationsRepository();
+
+        repo = new LocationsRepository();
         //repo.getAllLocations(((ISTViewApplication)getApplication()).srv, handler);
-        repo.locationByCategory(((ISTViewApplication)getApplication()).srv, handler, "hOT spOt");
+        repo.locationByCategory(((ISTViewApplication)getApplication()).srv, handler, tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText().toString());
+
+        tabLayout.addOnTabSelectedListener(m);
     }
 }
