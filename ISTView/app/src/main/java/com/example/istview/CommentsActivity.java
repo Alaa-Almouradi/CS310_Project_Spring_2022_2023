@@ -1,5 +1,6 @@
 package com.example.istview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +23,9 @@ public class CommentsActivity extends AppCompatActivity {
 
     CommentsRepository repo;
 
-    Locations loc = new Locations("645708d9b1d1496b8debeff5", "Viaport AVM", "car", 200, "ds", "Asfdfs", "asdd");
+    Locations location;
+
+    //Locations loc = new Locations("645708d9b1d1496b8debeff5", "Viaport AVM", "car", 200, "ds", "Asfdfs", "asdd");
 
 
     Handler handler = new Handler(new Handler.Callback() {
@@ -49,19 +53,31 @@ public class CommentsActivity extends AppCompatActivity {
         recView = findViewById(R.id.recyclerViewListComment);
         recView.setLayoutManager(new LinearLayoutManager(this));
 
+        location = (Locations) getIntent().getExtras().getSerializable("location");
+
         prgBar.setVisibility(View.VISIBLE);
 
         Button write_comment = findViewById(R.id.writeComment);
 
         write_comment.setOnClickListener(v-> {
 
-            // To write comment page
+            Intent i = new Intent(CommentsActivity.this, WriteCommentActivity.class);
+            i.putExtra("location",location);
+            startActivity(i);
 
         });
 
         repo = new CommentsRepository();
         //repo.getAllLocations(((ISTViewApplication)getApplication()).srv, handler);
-        repo.commentByLocation(((ISTViewApplication)getApplication()).srv, handler, loc);
+        repo.commentByLocation(((ISTViewApplication)getApplication()).srv, handler, location);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        repo = new CommentsRepository();
+        repo.commentByLocation(((ISTViewApplication)getApplication()).srv, handler, location);
 
     }
 }

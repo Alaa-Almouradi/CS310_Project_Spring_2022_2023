@@ -36,6 +36,8 @@ public class ActivityDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        Locations location = (Locations) getIntent().getExtras().getSerializable("location");
+
         imgLoc = findViewById(R.id.imageViewLoc);
         txtName = findViewById(R.id.textViewName);
         txtdesc = findViewById(R.id.textViewDescription);
@@ -44,12 +46,13 @@ public class ActivityDetails extends AppCompatActivity {
         btnComments.setOnClickListener(v->{
 
             Intent i = new Intent(ActivityDetails.this, CommentsActivity.class);
+            i.putExtra("location",location);
             startActivity(i);
 
         });
 
 
-        Locations location = (Locations) getIntent().getExtras().getSerializable("location");
+
         LocationsRepository repo = new LocationsRepository();
         repo.downloadImage(((ISTViewApplication)getApplication()).srv,imgHandler,location.getImage());
         txtName.setText(location.getName());
